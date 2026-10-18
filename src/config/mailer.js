@@ -6,5 +6,7 @@ const transporter = nodemailer.createTransport({
   auth: { user: process.env.BREVO_USER, pass: process.env.BREVO_KEY },
 });
 
-exports.sendMail = (to, subject, text) =>
-  transporter.sendMail({ from: process.env.MAIL_FROM, to, subject, text });
+exports.sendMail = (to, subject, text) => {
+  if (process.env.SKIP_EMAIL === "1") return Promise.resolve();
+  return transporter.sendMail({ from: process.env.MAIL_FROM, to, subject, text });
+};
